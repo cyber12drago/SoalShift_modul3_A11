@@ -46,4 +46,6 @@ int main(int argc, char *argv[]){
 	   pthread_join(tid[i], NULL);
 
 	}
+
+    return 0;
 }
