@@ -71,8 +71,9 @@ int main(int argc, char *argv[]){
 - Setiap thread menjalankan fungsi factorial dan mengeluarkan hasilnya
 - Setelah berhasi create thread lansung join agar bisa synchron
   > pthread_join(tid[i], NULL);
+# Soal 2
 
-#Soal 3
+# Soal 3
 Agmal dan Iraj merupakan 2 sahabat yang sedang kuliah dan hidup satu kostan, sayangnya mereka mempunyai gaya hidup yang berkebalikan, dimana Iraj merupakan laki-laki yang sangat sehat,rajin berolahraga dan bangun tidak pernah kesiangan sedangkan Agmal hampir menghabiskan setengah umur hidupnya hanya untuk tidur dan ‘ngoding’. Dikarenakan mereka sahabat yang baik, Agmal dan iraj sama-sama ingin membuat satu sama lain mengikuti gaya hidup mereka dengan cara membuat Iraj sering tidur seperti Agmal, atau membuat Agmal selalu bangun pagi seperti Iraj. Buatlah suatu program C untuk menggambarkan kehidupan mereka dengan spesifikasi sebagai berikut:
 
 a. Terdapat 2 karakter Agmal dan Iraj
