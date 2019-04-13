@@ -265,4 +265,345 @@ void* extract(void *arg)
     }
 }
 ```
+# Soal 5
+Angga, adik Jiwang akan berulang tahun yang ke sembilan pada tanggal 6 April besok. Karena lupa menabung, Jiwang tidak mempunyai uang sepeserpun untuk membelikan Angga kado. Kamu sebagai sahabat Jiwang ingin membantu Jiwang membahagiakan adiknya sehingga kamu menawarkan bantuan membuatkan permainan komputer sederhana menggunakan program C. Jiwang sangat menyukai idemu tersebut. Berikut permainan yang Jiwang minta. 
+Pemain memelihara seekor monster lucu dalam permainan. Pemain dapat  memberi nama pada monsternya.
+Monster pemain memiliki hunger status yang berawal dengan nilai 200 (maksimalnya) dan nanti akan berkurang 5 tiap 10 detik.Ketika hunger status mencapai angka nol, pemain akan kalah. Hunger status dapat bertambah 15 apabila pemain memberi makan kepada monster, tetapi banyak makanan terbatas dan harus beli di Market.
+Monster pemain memiliki hygiene status yang berawal dari 100 dan nanti berkurang 10 tiap 30 detik. Ketika hygiene status mencapai angka nol, pemain akan kalah. Hygiene status' dapat bertambah 30 hanya dengan memandikan monster. Pemain dapat memandikannya setiap 20 detik(cooldownnya 20 detik).
+Monster pemain memiliki health status yang berawal dengan nilai 300. Variabel ini bertambah (regenerasi)daa 5 setiap 10 detik ketika monster dalam keadaan standby.
+Monster pemain dapat memasuki keadaan battle. Dalam keadaan ini, food status(fitur b), hygiene status'(fitur c), dan ‘regenerasi’(fitur d) tidak akan berjalan. Health status dari monster dimulai dari darah saat monster pemain memasuki battle. Monster pemain akan bertarung dengan monster NPC yang memiliki darah 100. Baik monster pemain maupun NPC memiliki serangan sebesar 20. Monster pemain dengan monster musuh akan menyerang secara bergantian. 
+Fitur shop, pemain dapat membeli makanan sepuas-puasnya selama stok di toko masih tersedia.
+Pembeli (terintegrasi dengan game)
+Dapat mengecek stok makanan yang ada di toko.
+Jika stok ada, pembeli dapat membeli makanan.
+Penjual (terpisah)
+Bisa mengecek stok makanan yang ada di toko
+Penjual dapat menambah stok makanan.
+	Spesifikasi program:
+Program mampu mendeteksi input berupa key press. (Program bisa berjalan tanpa perlu menekan tombol enter)
+Program terdiri dari 3 scene yaitu standby, battle, dan shop.
+Pada saat berada di standby scene, program selalu menampilkan health status, hunger status, hygiene status, stok makanan tersisa, dan juga status kamar mandi (“Bath is ready” jika bisa digunakan, “Bath will be ready in [bath cooldown]s” jika sedang cooldown). Selain itu program selalu menampilkan 5 menu, yaitu memberi makan, mandi, battle, shop, dan exit. Contoh :
 
+Standby Mode
+Health : [health status]
+Hunger : [hunger status]
+Hygiene : [hygiene status]
+Food left : [your food stock]
+Bath will be ready in [cooldown]s
+Choices
+Eat
+Bath
+Battle
+Shop
+Exit
+
+Pada saat berada di battle scene, program selalu menampilkan health status milik pemain dan monster NPC. Selain itu, program selalu menampilkan 2 menu yaitu serang atau lari. Contoh :
+
+Battle Mode
+Monster’s Health : [health status]
+Enemy’s Health : [enemy health status]
+Choices
+Attack
+Run
+
+Pada saat berada di shop scene versi pembeli, program selalu menampilkan food stock toko dan milik pemain. Selain itu, program selalu menampilkan 2 menu yaitu beli dan kembali ke standby scene. Contoh :
+
+		Shop Mode
+		Shop food stock : [shop food stock]
+		Your food stock : [your food stock]
+		Choices
+Buy
+Back
+
+Pada program penjual, program selalu menampilkan food stock toko. Selain itu, program juga menampilkan 2 menu yaitu restock dan exit. Contoh :
+
+Shop
+Food stock : [shop food stock]
+Choices
+Restock
+Exit
+
+Pastikan terminal hanya mendisplay status detik ini sesuai scene terkait (hint: menggunakan system(“clear”))
+
+## Langkah-langkah 
+### Untuk soal5.c
+1. Buat fungsi input tanpa menekan "enter"
+```
+int input(void)//input tanpa enter
+{
+	struct termios oldt, newt;
+	int in;
+	tcgetattr( STDIN_FILENO, &oldt );
+	newt=oldt;
+	newt.c_lflag &= ~( ICANON | ECHO );
+	tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+	in=getchar();
+	tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+	return in;
+}
+```
+2. Buat fungsi cooldown bath
+```
+void* waktu(void* arg)//waktu yang berlalu
+{
+    cooldown=0;
+    while(1)
+    {
+		cooldown=cooldown+1;
+		sleep(1);
+    }
+}
+```
+3. Buat fungsi hunger status
+```
+void* hunger(void *arg)//hunger 
+{
+    while(1)
+    {
+		while(standby=0)
+		{
+		}
+		sleep(10);
+		hunger_stat=hunger_stat-5;
+		
+	}
+}
+```
+4. Buat fungsi hygene status
+```
+void* hygiene(void *arg)//hygiene
+{
+    while(1)
+    {
+		while(standby=0)
+		{
+		}
+		sleep(30);
+		hygiene_stat=hygiene_stat-10;
+		
+    }
+}
+```
+5. Buat fungsi regenerasi
+```
+void* regen_health(void *arg)//regenerasi
+{
+    while(1)
+    {
+		while(standby=0)
+		{
+		}
+		sleep(10);
+		health=health+5;
+    }
+}
+```
+6. Buat fungsi standby
+```
+void stand_by()
+{
+    while(1)
+    {	
+		system("clear");
+			if(hunger_stat<1 || hygiene_stat<1)//cek hunger dan hygene status
+			{
+				printf("You Died\n");
+				sleep(1);
+				exit(0);
+			}
+			printf("Standby Mode\n");
+			printf("Health : %d\n", health);
+			printf("Hunger : %d\n", hunger_stat);
+			printf("Hygiene : %d\n", hygiene_stat);
+			printf("Food left : %d\n", player_food);
+			if(cooldown>=20)//cek cooldown
+			{
+				printf("Bath is ready\n");
+			}
+			else
+			{
+				printf("Bath will be ready in %ds\n",20-cooldown);
+			}
+			printf("Choices\n");
+			printf("1. Eat\n");
+			printf("2. Bath\n");
+			printf("3. Battle\n");
+			printf("4. Shop\n");
+			printf("5. Exit\n");
+			choices=input();
+			if(choices=='1')//eat
+			{
+				if(player_food<1) //cek stock
+				{
+					printf("Stock Empty\n");
+				}
+				else
+				{
+					player_food=player_food-1;
+					hunger_stat=hunger_stat+15;
+					if(hunger_stat>200)//mencegah melebihi 200
+					{
+						hunger_stat=200;
+					}
+				}
+
+			}
+			else if(choices=='2')//bath
+			{
+				if(cooldown>=20)
+				{
+					cooldown=0;
+					printf("Bath is ready\n");
+					hygiene_stat=hygiene_stat+30;
+				}
+				else
+				{
+					printf("Bath will be ready in %ds\n", 20-cooldown);
+				}
+			}
+		else if(choices=='3')//battle
+		{
+			enemy_health=100;
+			system("clear");
+			standby=0;
+			battle();
+		}
+		else if(choices=='4')//shop
+		{
+			system("clear");
+			standby=0;
+			shop();
+	 	}
+		else if(choices=='5')//exit
+		{
+			system("clear");
+			exit(0);
+		}
+		system("clear");
+	}    
+}
+```
+7. Buat fungsi battle
+```
+void battle()
+{
+    while(1)
+    {
+    	system("clear");
+		printf("Battle Mode\n");
+		printf("Monster's Health : %d\n", health);
+		printf("Enemy's Health : %d\n", enemy_health);
+		printf("Choices\n");
+		printf("1. Attack\n");
+		printf("2. Run\n");
+		choices=input();
+		if(choices=='1')//attack
+		{
+			health=health-20;
+			enemy_health=enemy_health-20;
+			if(enemy_health<1)//cek health musuh
+			{
+				printf("You Win\n");
+				sleep(1);
+				system("clear");
+				standby=1;
+				stand_by();
+			}
+			if(health<1)//cek health player
+			{
+				printf("You Died\n");
+				sleep(1);
+				system("clear");
+				exit(0);
+			}			
+		}
+		else if(choices=='2')//run
+		{
+			system("clear");
+			stand_by();
+		}
+		system("clear");
+	}
+}
+```
+8. Buat fungsi shop
+```
+void shop()
+{
+    while(1)
+    {	
+    	system("clear");
+		printf("Shop Mode\n");
+		printf("Shop food stock : %d\n",*shop_stock);
+		printf("Your food stock : %d\n",player_food);
+		printf("Choices\n");
+		printf("1. Buy\n");
+		printf("2. Back\n");
+		choices=input();
+		if(choices=='1')//buy
+		{
+		    if(*shop_stock<0)
+		    {
+				printf("Stock Empty\n");
+		    }
+		    else
+		    { 
+				*shop_stock=*shop_stock-1;
+				player_food=player_food+1;
+		    }
+		}
+		else if(choices=='2')//back
+		{
+		    system("clear");
+		    standby=1;
+		    stand_by();
+		}
+		system("clear");
+	}
+}
+```
+9. Untuk stock shop digunakan shared memory
+```
+key_t key=1234;
+int shmid=shmget(key,sizeof(int),IPC_CREAT | 0666);
+shop_stock=shmat(shmid,NULL,0);
+```
+### Untuk soal5shop.c
+1. Buat fungsi input tanpa menekan "enter"
+```
+int input(void)//input tanpa enter
+{
+	struct termios oldt, newt;
+	int in;
+	tcgetattr( STDIN_FILENO, &oldt );
+	newt=oldt;
+	newt.c_lflag &= ~( ICANON | ECHO );
+	tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+	in=getchar();
+	tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+	return in;
+}
+```
+2. Digunakan shared memory untuk restock
+```
+while(1)
+    {
+		printf("Shop\n");
+		printf("Food stock : %d\n", *shop_stock);
+		printf("Choices\n");
+		printf("1. Restock\n");
+		printf("2. Exit\n");
+		choices=input();
+		if(choices=='1')//restock
+		{
+			*shop_stock=*shop_stock+1;
+		}
+		else if(choices=='2')//back
+		{
+			system("clear");
+			exit(0);
+		}
+		system("clear");
+	}
+	return 0;
+```
